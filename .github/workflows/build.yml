@@ -1,0 +1,34 @@
+name: Build Vile Truths Game
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Project Zip
+        run: |
+          unzip "viletruths.zip" -d ./extracted_project
+          mv ./extracted_project/game ./game || mv ./extracted_project/*/game ./game
+          mv ./extracted_project/icon.png ./icon.png || mv ./extracted_project/*/icon.png ./icon.png || true
+
+      - name: Set up Java 8 for Android
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Setup Ren'Py and Build APK/Windows
+        uses: Ayowel/renpy-setup-action@v3
+        with:
+          action: distribute
+          version: '8.2.1'
+          packages: 'android, win'
+          out_dir: './build_outputs'
+
+      - name: Upload Game Builds
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vile-Truths-Demo
+          path: './build_outputs/*'
