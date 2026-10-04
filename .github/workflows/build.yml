@@ -9,9 +9,10 @@ jobs:
 
       - name: Extract Project Zip
         run: |
-          unzip "viletruths.zip" -d ./extracted_project
-          mv ./extracted_project/game ./game || mv ./extracted_project/*/game ./game
-          mv ./extracted_project/icon.png ./icon.png || mv ./extracted_project/*/icon.png ./icon.png || true
+          unzip viletruths.zip -d ./
+          # अगर ज़िप के अंदर सीधा game फोल्डर है, तो उसे मुख्य रास्ते पर लाने के लिए
+          mv ./Vile*The*Blueprint/game ./game || mv ./*/game ./game || true
+          mv ./Vile*The*Blueprint/icon.png ./icon.png || mv ./*/icon.png ./icon.png || true
 
       - name: Set up Java 8 for Android
         uses: actions/setup-java@v4
